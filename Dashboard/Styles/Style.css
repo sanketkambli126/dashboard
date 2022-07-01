@@ -1,0 +1,193 @@
+﻿body {
+    background-color: #efefef;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.inline-flex-container {
+    display: inline-flex;
+    border: 1px solid black;
+}
+
+.flex-container.flex-direction-reverse {
+    flex-direction: row-reverse;
+}
+
+.flex-container.flex-direction-column {
+    flex-direction: column;
+}
+
+.flex-container.flex-direction-column-reverse {
+    flex-direction: column-reverse;
+}
+
+.flex-container.flex-wraping {
+    flex-wrap: wrap;
+}
+
+.flex-container.flex-wraping-reverse {
+    flex-wrap: wrap;
+}
+
+.green-pos {
+    background-color: #afd498;
+}
+
+.red-neg {
+    background-color: #ce8e8e;
+}
+
+/**
+    Not Checked css 
+    -----------
+    align-item 
+    align-content
+    align-self
+    gap
+    justify-content
+    --------------
+*/
+
+.card-group {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    flex-wrap: wrap;
+    transition-duration: 3s;
+}
+
+
+.card {
+    height: 5em;
+    width: 10em;
+    display: inline-flex;
+    flex-direction: column;
+    box-shadow: 2px 2px 6px #bed1d6;
+    background-color: white;
+    border-radius: 5px;
+}
+
+
+.card-container {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 7;
+}
+
+
+.card-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-progress {
+    display: inline-flex;
+    flex: 1;
+}
+
+.card-value {
+    font-size: 20px;
+    color: #678b8d;
+    font-weight: bold;
+}
+
+.card-item {
+    font-size: 14px;
+    color: #678b8d;
+}
+
+.filter {
+    display: flex;
+    flex-direction: row;
+    background-color: #eaeaea;
+    justify-content: center;
+    align-items: center;
+    align-content: flex-start;
+    border-radius: 5px;
+}
+
+.filter-items {
+    display: inline-flex;
+    flex-direction: row;
+    gap: 1em;
+    align-items: center;
+    align-content: flex-start;
+    flex: 10;
+    flex-wrap: wrap;
+    padding: 12px;
+}
+
+.filter-cannel {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex: 1;
+    border-left: 1px solid #58738a;
+    padding: 12px;
+}
+
+.filter-text {
+    font-size: 14px;
+    color: #58738a;
+    font-weight: 750;
+    font-family: sans-serif;
+}
+
+.filter-icon {
+    padding-left: 5px;
+    width: 2em;
+}
+
+.filter-item {
+    display: inline-flex;
+    align-items: center;
+    color: #58738a;
+    font-weight: 550;
+    background-color: #d0d0d0;
+    font-size: 14px;
+    border-radius: 5px;
+    max-width: 200px;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px 10px 5px 10px;
+    gap: 2em;
+    font-family: sans-serif;
+}
+
+.filter-item-cancel {
+    cursor: pointer;
+}
+
+.filter-item-close {
+    cursor: pointer;
+}
+
+.bar-loader-div {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: 100%;
+}
+
+/**Test Classes */
+
+.card-value-orange {
+    color: orange !important;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.card-container-offwhite {
+    background-color: floralwhite;
+}
+
+.card-text-color {
+    color: brown;
+    font-size: 20px;
+    text-shadow: 2px black;
+}
