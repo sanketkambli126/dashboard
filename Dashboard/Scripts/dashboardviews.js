@@ -1,4 +1,278 @@
-﻿const threeDots = '...';
+﻿var STYLESHEET = document.styleSheets[0]; const THREEDOTS = '...'; // to make continuation of Word if it exceeds the value
+const valueType = { string: "string", number: "number", percentage: "percentage", currency: "currency" };
+const FORMAT = { number: { style: { numeric: 'number', currency: 'currency', percentage: 'percentage' } } }; Object.freeze(FORMAT);
+const CURRENCY = { rupees: "", euro: "", pounds: "", dollars: "USD" }; Object.freeze(CURRENCY);
+const COUNTRY_SYMBOL = { INDIA: "hi-IN", US: "en-US" }; Object.freeze(COUNTRY_SYMBOL);
+const COMPLETE_COLOUR = "green", PENDING_COLOR = "red", COMPLETE_COLOR_CLASS = "green-pos", PENDING_COLOR_CLASS = "red-neg";
+const PARAM_ACTION = { append: 1, override: 2 }; Object.freeze(PARAM_ACTION);
+const LOADER = `<div class="loader loader--style1" title="0"> <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve"> <path opacity="0.2" fill="#000" d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946 s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634 c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z" /> <path fill="#378" d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0 C22.32,8.481,24.301,9.057,26.013,10.047z"> <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="1s" repeatCount="indefinite" /></path></svg></div>`
+const KPI_CRADS_FUNCTIONS =
+    {
+        container: [{
+            fnClick: 'click',
+            fnBlur: 'blur',
+            fnDblClick: 'dblclick',
+            fnFocusIn: 'focusin',
+            fnFocusOut: 'focusout',
+            fnFocus: 'focus',
+            fnKeyDown: 'keydown',
+            fnKeyup: 'keyup',
+            fnKeyPress: 'keypress',
+            fnMouseOver: 'mouseover'
+        }],
+
+        cardValue: [{
+            fnClick: 'click',
+            fnBlur: 'blur',
+            fnDblClick: 'dblclick',
+            fnFocusIn: 'focusin',
+            fnFocusOut: 'focusout',
+            fnFocus: 'focus',
+            fnKeyDown: 'keydown',
+            fnKeyup: 'keyup',
+            fnKeyPress: 'keypress',
+            fnMouseOver: 'mouseover'
+        }],
+
+        cardText: [{
+            fnClick: 'click',
+            fnBlur: 'blur',
+            fnDblClick: 'dblclick',
+            fnFocusIn: 'focusin',
+            fnFocusOut: 'focusout',
+            fnFocus: 'focus',
+            fnKeyDown: 'keydown',
+            fnKeyup: 'keyup',
+            fnKeyPress: 'keypress',
+            fnMouseOver: 'mouseover'
+        }],
+
+        cardProgressValue: [{
+            fnClick: 'click',
+            fnBlur: 'blur',
+            fnDblClick: 'dblclick',
+            fnFocusIn: 'focusin',
+            fnFocusOut: 'focusout',
+            fnFocus: 'focus',
+            fnKeyDown: 'keydown',
+            fnKeyup: 'keyup',
+            fnKeyPress: 'keypress',
+            fnMouseOver: 'mouseover'
+        }]
+    }
+const SIMPLE_CRADS_FUNCTIONS =
+    {
+        container: [{
+            fnClick: 'click',
+            fnBlur: 'blur',
+            fnDblClick: 'dblclick',
+            fnFocusIn: 'focusin',
+            fnFocusOut: 'focusout',
+            fnFocus: 'focus',
+            fnKeyDown: 'keydown',
+            fnKeyup: 'keyup',
+            fnKeyPress: 'keypress',
+            fnMouseOver: 'mouseover'
+        }],
+
+        cardValue: [{
+            fnClick: 'click',
+            fnBlur: 'blur',
+            fnDblClick: 'dblclick',
+            fnFocusIn: 'focusin',
+            fnFocusOut: 'focusout',
+            fnFocus: 'focus',
+            fnKeyDown: 'keydown',
+            fnKeyup: 'keyup',
+            fnKeyPress: 'keypress',
+            fnMouseOver: 'mouseover'
+        }],
+
+        cardText: [{
+            fnClick: 'click',
+            fnBlur: 'blur',
+            fnDblClick: 'dblclick',
+            fnFocusIn: 'focusin',
+            fnFocusOut: 'focusout',
+            fnFocus: 'focus',
+            fnKeyDown: 'keydown',
+            fnKeyup: 'keyup',
+            fnKeyPress: 'keypress',
+            fnMouseOver: 'mouseover'
+        }]
+    }
+const FILTER_OPTION =
+{
+    filterCannel: [{
+        fnClick: 'click',
+        fnBlur: 'blur',
+        fnDblClick: 'dblclick',
+        fnFocusIn: 'focusin',
+        fnFocusOut: 'focusout',
+        fnFocus: 'focus',
+        fnKeyDown: 'keydown',
+        fnKeyup: 'keyup',
+        fnKeyPress: 'keypress',
+        fnMouseOver: 'mouseover'
+    }]
+}
+const defaultCountrySymbol = COUNTRY_SYMBOL.INDIA;
+const DefaultCurrency = CURRENCY.rupees
+const defaultStyle = FORMAT.number.style.numeric;
+// Prototyping Convert to Boolean Method on String Object
+String.prototype.convertStringToBool = function () {
+    inputString = this || "";
+    inputString = inputString.toLowerCase();
+
+    switch (inputString) {
+        case "1":
+        case "true":
+        case "yes":
+        case "y":
+        case 1:
+        case true:
+            return true;
+            break;
+
+        default: return false;
+    }
+}
+
+function fn_getIntlFormatter(countrySymbol, obj) {
+    return new Intl.NumberFormat(countrySymbol, obj)
+}
+
+function fn_getCurrencyFormater(CountrySymbol, Currency) {
+    let obj = { style: format.Number.Style.Currency, currency: Currency }; return fn_getIntlFormatter(CountrySymbol, obj);
+};
+
+Intl.NumberFormat.prototype.getCurrencyValue = function (val, isExcludeSymbol) {
+    try { return this.format(val).substr(isExcludeSymbol ? 1 : 0, val.length); } catch (err) { return this.format(val); }
+}
+
+function fn_tickerformat(obj, val, style, locale, currency, useThousandSeperator) {
+    switch (style) {
+        case valueType.string:
+            setInnerHTMLValue(obj, val);
+            break;
+        case valueType.number:
+            if (typeof val != "number") setInnerHTMLValue(obj, val)
+            else {
+                formatter = useThousandSeperator ? new Intl.NumberFormat("en-US") : undefined;
+                applyTickerFormat(formatter);
+            }
+            break;
+        case valueType.percentage:
+
+            if (typeof val != "number") setInnerHTMLValue(obj, val)
+            else {
+                var option = {
+                    style: 'percent',
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 0
+                };
+                var formatter = new Intl.NumberFormat("en-US", option);
+                applyTickerFormat(formatter);
+            }
+            break;
+        case valueType.currency:
+            if (typeof val != "number") setInnerHTMLValue(obj, val)
+            else {
+                formatter = new Intl.NumberFormat(locale || "hi-IN", {
+                    style: 'currency',
+                    currency: currency || "INR",
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 0
+                })
+                applyTickerFormat(formatter);
+            }
+            break;
+        default:
+            osetInnerHTMLValue(obj, val);
+            break
+
+    }
+
+    function setInnerHTMLValue(obj, val) {
+        obj.innerHTML = val;
+    }
+
+    function applyTickerFormat(formatter) {
+        let counts = setInterval(updated);
+        valFunc = getValue(formatter)
+        let upto = 0;
+        let incrementer = val > 100 ? Math.ceil(val / 100) : 1;
+        function updated() {
+            finalVal = upto < val ? upto : val;
+            obj.innerHTML = valFunc(style == valueType.percentage ? finalVal / 100 : finalVal);
+            if (upto >= Number.parseInt(val)) {
+                clearInterval(counts);
+            }
+            upto += incrementer;
+        }
+    }
+}
+
+function fnSetValue(obj, val, style, locale, currency, useThousandSeperator) {
+    switch (style) {
+        case valueType.string:
+            setInnerHTMLValue(obj, val);
+            break;
+        case valueType.number:
+            if (typeof val != "number") setInnerHTMLValue(obj, val)
+            else {
+                formatter = useThousandSeperator ? new Intl.NumberFormat("en-US") : undefined;
+                applyTickerFormat(formatter);
+            }
+            break;
+        case valueType.percentage:
+
+            if (typeof val != "number") setInnerHTMLValue(obj, val)
+            else {
+                var option = {
+                    style: 'percent',
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 0
+                };
+                var formatter = new Intl.NumberFormat("en-US", option);
+                applyTickerFormat(formatter);
+            }
+            break;
+        case valueType.currency:
+            if (typeof val != "number") setInnerHTMLValue(obj, val)
+            else {
+                formatter = new Intl.NumberFormat(locale || "hi-IN", {
+                    style: 'currency',
+                    currency: currency || "INR",
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 0
+                })
+                applyTickerFormat(formatter);
+            }
+            break;
+        default:
+            osetInnerHTMLValue(obj, val);
+            break
+
+    }
+
+    function setInnerHTMLValue(obj, val) {
+        obj.innerHTML = val;
+    }
+
+    function applyTickerFormat(formatter) {
+        valFunc = getValue(formatter)
+        obj.innerHTML = valFunc(style == valueType.percentage ? val / 100 : val);
+    }
+}
+
+function getValue(formatter) {
+    function returnValue(val) { return formatter.format(val); }
+    function returnSimpleValue(val) { return val; }
+    return formatter ? returnValue : returnSimpleValue;
+}
+
+
 
 function generateLightColorRgb() {
     const red = Math.floor((1 + Math.random()) * 256 / 2);
@@ -10,7 +284,7 @@ function generateLightColorRgb() {
 /// Convert all Elements in the list to Lower case
 function listToLowerList(list) {
     // Checking if list element has values
-    if (list && list["length"] && list.join("").length > 0) {
+    if (list && Array.isArray(list) && list.join("").length > 0) {
         // convert list to lower case list
         return list.map(function (e) { return e.toLowerCase() })
     }
@@ -50,7 +324,7 @@ function createElementNS(tagName) {
 
 function addClassListToHtmlElement(HTMLElement, classList) {
     // appending classlist to HTML Element
-    if ((classList && classList["length"] && classList.join("").length > 0) && (HTMLElement)) {
+    if ((classList && Array.isArray(classList) && classList.join("").length > 0) && (HTMLElement)) {
         classList.forEach(function (c) { HTMLElement.classList.add(c) })
     }
 }
@@ -107,7 +381,7 @@ function getMeasuredTextWidth(text, font) {
 function getWidthCalculatedText(text, maxWidth, font) {
 
     totalwidth = getMeasuredTextWidth(text, font);
-    let dotwidth = getMeasuredTextWidth(threeDots, font);
+    let dotwidth = getMeasuredTextWidth(THREEDOTS, font);
     if (maxWidth >= totalwidth)
         return text;
     else {
@@ -117,7 +391,7 @@ function getWidthCalculatedText(text, maxWidth, font) {
             newtext += c;
             totalwidth = getMeasuredTextWidth(newtext, font);
             if ((totalwidth + dotwidth) >= (maxWidth) && (i != text.length && (totalwidth > maxWidth || dotwidth < getMeasuredTextWidth(text.substr(i, text.length - i), font)))) {
-                return newtext + (newtext == text ? "" : threeDots);
+                return newtext + (newtext == text ? "" : THREEDOTS);
             }
             i++;
         }
@@ -188,7 +462,7 @@ function dashboardItems() {
     }
 
     this.$applyfilter = function (_data, func) {
-        if (_data && _data["length"]) {
+        if (_data && Array.isArray(_data)) {
             return _data.filter(func);
         }
     }
@@ -207,71 +481,36 @@ function addLoader() {
     return loader;
 }
 
-// Prototyping Convert to Boolean Method on String Object
-String.prototype.convertStringToBool = function () {
-    inputString = this || "";
-    inputString = inputString.toLowerCase();
-
-    switch (inputString) {
-        case "1":
-        case "true":
-        case "yes":
-        case "y":
-        case 1:
-        case true:
-            return true;
-            break;
-
-        default: return false;
-    }
-}
-
 /////////////////////////////////////////////////// KPI card //////////////////////////////////////////////////////////////
 
 function KPICard(inputObject) {
     // Inheriting Parent
     dashboardItems.call(this);
-    this.$data = {}
-    this.$cardDefinition = getValueFromObject(inputObject, "cardDefinition");
-    this.$selectorElement = getValueFromObject(inputObject, "selector")
-
     let globalKPIObject = this;
 
-    /// Initialize Default Values to be used for further
-    this.$defaultValues =
-        {
+    this.$data = {}
+    this.$selectorElement = getValueFromObject(inputObject, "selector")
 
-            completeColour: COMPLETE_COLOUR,
-            pendingColor: PENDING_COLOR,
-            completeColourClass: COMPLETE_COLOR_CLASS,
-            pendingColourClass: PENDING_COLOR_CLASS
-        }
+    let cardDefinition = getValueFromObject(inputObject, "cardDefinition");
+    let cardValueOptions = getValueFromObject(inputObject, "valueOption");
+    let cardContainerOptions = getValueFromObject(inputObject, "containerOption");
+    let cardTextOptions = getValueFromObject(inputObject, "textOption");
+    let KPIOptions = getValueFromObject(inputObject, "keyProgessOption")
+    let url = getValueFromObject(inputObject, "url");
+    let method = getValueFromObject(inputObject, "method", "GET");
+    let requestData = getValueFromObject(inputObject, "requestData", {});
 
     function drawCard(_data, _CardDefinition, cardElement) {
-        let cardcontainer = createCardContainer(_data, _CardDefinition);
-        let carditem = createCardItem(_data, _CardDefinition);
-        let span_value = createCardValue(_data, _CardDefinition);
-        let span_text = createCardText(_data, _CardDefinition);
-        let card_progress = createCardProgress(_data, _CardDefinition);
-
-        //appending Childs 
-        appendElements(cardElement, cardcontainer);
-        appendElements(cardcontainer, carditem)
-        appendElements(carditem, span_value);
-
-        appendElements(carditem, span_text);
-        appendElements(cardElement, card_progress)
-
+        cardContainer = createCardContainer(_data, _CardDefinition, cardElement); cardItem = createCardItem(_data, _CardDefinition, cardContainer); spanValue = createCardValue(_data, _CardDefinition, cardItem); spanText = createCardText(_data, _CardDefinition, cardItem); cardProgress = createCardProgress(_data, _CardDefinition, cardElement);
     }
-    function createCardContainer(_data, _CardDefinition) {
-        let cardContainerOptions = getValueFromObject(inputObject, "containerOption");
-        var cardcontainer = createHtmlElement('div'); addClassListToHtmlElement(cardcontainer, ['card-container']);
+    function createCardContainer(_data, _CardDefinition, cardElement) {
+        var cardContainer = createHtmlElement('div'); addClassListToHtmlElement(cardContainer, ['card-container']); appendElements(cardElement, cardContainer)
+        globalKPIObject.$selectorElement.innerHTML = cardContainer;
         if (cardContainerOptions) {
             const classNames = cardContainerOptions["className"] ? cardContainerOptions["className"] : "";
-            let classNamesList = classNames.split(" ");
-            if (classNamesList && classNamesList["length"] > 0) { addClassListToHtmlElement(cardcontainer, classNamesList) }
-            if (cardContainerOptions["id"]) { cardcontainer.id = cardContainerOptions["id"]; }
-            assingCardContainerEvents(cardcontainer)
+            let classNamesList = classNames.split(" "); if (classNamesList && classNamesList["length"] > 0) addClassListToHtmlElement(cardContainer, classNamesList)
+            if (cardContainerOptions["id"]) cardContainer.id = cardContainerOptions["id"];
+            assingCardContainerEvents(cardContainer)
             function assingCardContainerEvents(container_obj) {
                 Object.keys(KPI_CRADS_FUNCTIONS.container[0]).filter(function (e) { return Object.keys(cardContainerOptions).includes(e); }).forEach(function (e) {
                     container_obj.addEventListener(KPI_CRADS_FUNCTIONS.container[0][e], function (event) {
@@ -281,82 +520,72 @@ function KPICard(inputObject) {
                 });
             }
         }
-        return cardcontainer;
+        return cardContainer;
     }
-    function createCardItem(_data, _CardDefinition) {
-        var carditem = createHtmlElement('div'); addClassListToHtmlElement(carditem, ['card-item']); return carditem;
+    function createCardItem(_data, _CardDefinition, cardContainer) {
+        var cardItem = createHtmlElement('div'); addClassListToHtmlElement(cardItem, ['card-item']); appendElements(cardContainer, cardItem); return cardItem;
+
     }
-    function createCardValue(_data, _CardDefinition) {
-        let cardValueOptions = getValueFromObject(inputObject, "valueOption");
-        var span_value = createHtmlElement('span');
-        addClassListToHtmlElement(span_value, ['card-value']);
+    function createCardValue(_data, _CardDefinition, cardItem) {
+        var spanValue = createHtmlElement('span'); addClassListToHtmlElement(spanValue, ['card-value']); appendElements(cardItem, spanValue);
         if (cardValueOptions) {
             const classNames = cardValueOptions["className"] ? cardValueOptions["className"] : "";
             let classNamesList = classNames.split(" ");
-            if (classNamesList && classNamesList["length"] > 0) { addClassListToHtmlElement(span_value, classNamesList) }
-            if (cardValueOptions["id"]) { span_value.id = cardValueOptions["id"]; }
-            if (cardValueOptions["animate_keyframe"]) { span_value.animate(cardValueOptions["animate_keyframe"]); }
-            assingCardValueEvents(span_value)
-            if (cardValueOptions && Object.keys(cardValueOptions).includes('applyTickerFormat') && cardValueOptions["applyTickerFormat"] == true) {
-                fn_tickerformat(span_value, _data[_CardDefinition.value]);
-            }
-            else {
-                span_value.innerHTML = _data[_CardDefinition.value] || "";
-            }
-
-            function assingCardValueEvents(span_value_object) {
-                Object.keys(KPI_CRADS_FUNCTIONS.cardValue[0]).filter(function (e) { return Object.keys(cardValueOptions).includes(e); }).forEach(function (e) {
-                    span_value_object.addEventListener(KPI_CRADS_FUNCTIONS.cardValue[0][e], function (event) {
-                        cardValueOptions[e](_data, span_value, _data[_CardDefinition.value]);
-                        event.stopPropagation();
-                    })
-                });
-            }
+            if (classNamesList && classNamesList["length"] > 0) addClassListToHtmlElement(spanValue, classNamesList)
+            if (cardValueOptions["id"]) spanValue.id = cardValueOptions["id"];
+            assingCardValueEvents(spanValue)
         }
-        return span_value;
+        if (cardValueOptions && Object.keys(cardValueOptions).includes('applyTickerFormat') && cardValueOptions["applyTickerFormat"] == true) fn_tickerformat(spanValue, _data[_CardDefinition.value], cardValueOptions["valueType"] || (typeof _data[_CardDefinition.value]), cardValueOptions["countrySymbol"], cardValueOptions["currency"], cardValueOptions["useThousandSeperator"]);
+        else {
+            fnSetValue(spanValue, _data[_CardDefinition.value], cardValueOptions["valueType"] || (typeof _data[_CardDefinition.value]), cardValueOptions["countrySymbol"], cardValueOptions["currency"], cardValueOptions["useThousandSeperator"]);
+        }
+        function assingCardValueEvents(span_value_object) {
+            Object.keys(KPI_CRADS_FUNCTIONS.cardValue[0]).filter(function (e) { return Object.keys(cardValueOptions).includes(e); }).forEach(function (e) {
+                span_value_object.addEventListener(KPI_CRADS_FUNCTIONS.cardValue[0][e], function (event) {
+                    cardValueOptions[e](_data, spanValue, _data[_CardDefinition.value]);
+                    event.stopPropagation();
+                })
+            });
+        }
+        return spanValue;
     }
-    function createCardText(_data, _CardDefinition) {
-        let cardTextOptions = getValueFromObject(inputObject, "textOption");
-        var span_heading = createHtmlElement('span');
-        addClassListToHtmlElement(span_heading, ['card-text']);
-        span_heading.innerHTML = _data[_CardDefinition.title] || "";
+    function createCardText(_data, _CardDefinition, cardItem) {
+        var spanHeading = createHtmlElement('span'); addClassListToHtmlElement(spanHeading, ['card-text']); appendElements(cardItem, spanHeading)
+        spanHeading.innerHTML = _data[_CardDefinition.title] || "";
         if (cardTextOptions) {
             const classNames = cardTextOptions["className"] ? cardTextOptions["className"] : "";
             let classNamesList = classNames.split(" ");
-            if (classNamesList && classNamesList["length"] > 0) { addClassListToHtmlElement(span_heading, classNamesList) }
-           
-            assingCardTextEvents(span_heading)
+            if (classNamesList && classNamesList["length"] > 0) addClassListToHtmlElement(spanHeading, classNamesList)
+            assingCardTextEvents(spanHeading)
             function assingCardTextEvents(span_heading_object) {
                 Object.keys(KPI_CRADS_FUNCTIONS.cardText[0]).filter(function (e) { return Object.keys(cardTextOptions).includes(e); }).forEach(function (e) {
                     span_value_object.addEventListener(KPI_CRADS_FUNCTIONS.cardText[0][e], function (event) {
-                        cardTextOptions[e](_data, span_heading, _data[_CardDefinition.title]);
+                        cardTextOptions[e](_data, spanHeading, _data[_CardDefinition.title]);
                         event.stopPropagation();
                     })
                 });
             }
         }
-        return span_heading;
+        return spanHeading;
     }
-    function createCardProgress(_data, _CardDefinition) {
-        var card_progress = createHtmlElement('div'); addClassListToHtmlElement(card_progress, ['card-progress']);
+    function createCardProgress(_data, _CardDefinition, card) {
+        var cardProgress = createHtmlElement('div'); addClassListToHtmlElement(cardProgress, ['card-progress']); appendElements(card, cardProgress)
         let KPIDefinition = _CardDefinition["KPI"];
         let KPIValues = _data[KPIDefinition];
-        let KPIOptions = getValueFromObject(inputObject, "keyProgessOption")
-        if (KPIValues && typeof KPIValues == "object") {
+        if (KPIValues && Array.isArray(KPIValues)) {
             if (KPIValues["length"] && KPIValues["length"] > 0) {
                 const totalValue = KPIValues.map(function (e) { return Number.parseFloat(e.value); }).reduce(function (val1, val2) { return val1 + val2 })
                 KPIValues.forEach(function (e) { e.$widthPercent = (Number.parseFloat(e.value) * 100) / totalValue; })
                 KPIValues.forEach(function (e, idx) {
-                    const optionObject = KPIOptions && KPIOptions["length"] && KPIOptions["length"] > 0 ? KPIOptions[(idx % KPIOptions.length)] : KPIOptions;
                     let KPIObject = getKPIIndicator(e.$widthPercent, e.value);
-                    if (optionObject) {
-                        let classNames = optionObject["className"] ? optionObject["className"] : "";
-                        let classNamesList = classNames.split(" ");
-                        if (classNamesList && classNamesList["length"] > 0) { addClassListToHtmlElement(KPIObject, classNamesList) }
-                        if (optionObject["id"]) { KPIObject.id = optionObject["id"]; }
-                        assignProgressEvents(KPIObject, optionObject, _data, e, e.value, idx);
-                        card_progress.appendChild(KPIObject);
+                    let classNames = e["className"] ? e["className"] : "";
+                    let classNamesList = classNames.split(" ");
+                    if (classNamesList && classNamesList["length"] > 0) { addClassListToHtmlElement(KPIObject, classNamesList) }
+                    if (e["id"]) { KPIObject.id = e["id"]; }
+                    if (KPIOptions) {
+                        assignProgressEvents(KPIObject, KPIOptions, _data, e, e.value, idx);
                     }
+                    cardProgress.appendChild(KPIObject);
                 })
 
                 function assignProgressEvents(KPIObject, optionObject, _data, KPIValue, value, index) {
@@ -378,7 +607,7 @@ function KPICard(inputObject) {
         else {
             throw Error("KPIs are not defined as expected")
         }
-        return card_progress;
+        return cardProgress;
     }
 
     this.$drawcards = function () {
@@ -387,7 +616,6 @@ function KPICard(inputObject) {
         addClassListToHtmlElement(card, ["card"])
 
         globalKPIObject.$selectorElement.html(card)
-        let url = getValueFromObject(inputObject, "url");
         if (url) {
             let loader = addLoader();
             card.appendChild(loader);
@@ -403,20 +631,20 @@ function KPICard(inputObject) {
                 globalKPIObject.$Ajax(
                     {
                         url: url,
-                        method: getValueFromObject(inputObject, "method") || "GET",
-                        data: getValueFromObject(inputObject, "requestData") || {},
+                        method: method,
+                        data: requestData,
                         isAsync: true,
                         resolve: resolve,
                         success: success
                     })
             }).then(function () {
                 loader.remove();
-                drawCard(globalKPIObject.$data, globalKPIObject.$cardDefinition, card);
+                drawCard(globalKPIObject.$data, cardDefinition, card);
             })
         }
         else {
             globalKPIObject.$data = getValueFromObject(inputObject, "data");
-            drawCard(globalKPIObject.$data, globalKPIObject.$cardDefinition, card);
+            drawCard(globalKPIObject.$data, cardDefinition, card);
         }
     }
 }
@@ -434,7 +662,7 @@ jQuery.prototype.KPICard = function (inputObject) {
     inputObject = inputObject || {};
     inputObject["selector"] = this;
     let objKPICard = new KPICard(inputObject);
-    objKPICard.$drawcards(objKPICard.$data, objKPICard.$cardDefinition)
+    objKPICard.$drawcards()
     return objKPICard;
 }
 
@@ -444,111 +672,87 @@ jQuery.prototype.KPICard = function (inputObject) {
 function SimpleCard(inputObject) {
     // Inheriting Parent
     dashboardItems.call(this);
+    let globalKPIObject = this;
+
     this.$data = {}
-    this.$cardDefinition = getValueFromObject(inputObject, "cardDefinition");
     this.$selectorElement = getValueFromObject(inputObject, "selector")
 
-    let globalSimpleCardObject = this;
-
-    /// Initialize Default Values to be used for further
-    this.$defaultValues =
-        {
-
-            completeColour: COMPLETE_COLOUR,
-            pendingColor: PENDING_COLOR,
-            completeColourClass: COMPLETE_COLOR_CLASS,
-            pendingColourClass: PENDING_COLOR_CLASS
-        }
+    let cardDefinition = getValueFromObject(inputObject, "cardDefinition");
+    let cardValueOptions = getValueFromObject(inputObject, "valueOption");
+    let cardContainerOptions = getValueFromObject(inputObject, "containerOption");
+    let cardTextOptions = getValueFromObject(inputObject, "textOption");
+    let KPIOptions = getValueFromObject(inputObject, "keyProgessOption")
+    let url = getValueFromObject(inputObject, "url");
+    let method = getValueFromObject(inputObject, "method", "GET");
+    let requestData = getValueFromObject(inputObject, "requestData", {});
 
     function drawCard(_data, _CardDefinition, cardElement) {
-        let cardcontainer = createCardContainer(_data, _CardDefinition);
-        let carditem = createCardItem(_data, _CardDefinition);
-        let span_value = createCardValue(_data, _CardDefinition);
-        let span_text = createCardText(_data, _CardDefinition);
-
-        //appending Childs 
-        appendElements(cardElement, cardcontainer);
-        appendElements(cardcontainer, carditem)
-        appendElements(carditem, span_value);
-
-        appendElements(carditem, span_text);
-
-        let cardValueOptions = getValueFromObject(inputObject, "valueOption");
-        if (cardValueOptions && Object.keys(cardValueOptions).includes('applyTickerFormat') && cardValueOptions["applyTickerFormat"] == true) {
-            fn_tickerformat(span_value, _data[_CardDefinition.value]);
-        }
-        else {
-            span_value.innerHTML = _data[_CardDefinition.value] || "";
-        }
+        cardContainer = createCardContainer(_data, _CardDefinition, cardElement); cardItem = createCardItem(_data, _CardDefinition, cardContainer); spanValue = createCardValue(_data, _CardDefinition, cardItem); spanText = createCardText(_data, _CardDefinition, cardItem);
     }
-    function createCardContainer(_data, _CardDefinition) {
-        let cardContainerOptions = getValueFromObject(inputObject, "containerOption");
-        var cardcontainer = createHtmlElement('div'); addClassListToHtmlElement(cardcontainer, ['card-container']);
+    function createCardContainer(_data, _CardDefinition, cardElement) {
+        var cardContainer = createHtmlElement('div'); addClassListToHtmlElement(cardContainer, ['card-container']); appendElements(cardElement, cardContainer)
+        globalKPIObject.$selectorElement.innerHTML = cardContainer;
         if (cardContainerOptions) {
             const classNames = cardContainerOptions["className"] ? cardContainerOptions["className"] : "";
-            let classNamesList = classNames.split(" ");
-            if (classNamesList && classNamesList["length"] > 0) { addClassListToHtmlElement(cardcontainer, classNamesList) }
-            if (cardContainerOptions["id"]) { cardcontainer.id = cardContainerOptions["id"]; }
-            assingCardContainerEvents(cardcontainer)
+            let classNamesList = classNames.split(" "); if (classNamesList && classNamesList["length"] > 0) addClassListToHtmlElement(cardContainer, classNamesList)
+            if (cardContainerOptions["id"]) cardContainer.id = cardContainerOptions["id"];
+            assingCardContainerEvents(cardContainer)
             function assingCardContainerEvents(container_obj) {
-                Object.keys(SIMPLE_CRADS_FUNCTIONS.container[0]).filter(function (e) { return Object.keys(cardContainerOptions).includes(e); }).forEach(function (e) {
-                    container_obj.addEventListener(SIMPLE_CRADS_FUNCTIONS.container[0][e], function (event) {
+                Object.keys(KPI_CRADS_FUNCTIONS.container[0]).filter(function (e) { return Object.keys(cardContainerOptions).includes(e); }).forEach(function (e) {
+                    container_obj.addEventListener(KPI_CRADS_FUNCTIONS.container[0][e], function (event) {
                         cardContainerOptions[e](_data);
                         event.stopPropagation();
                     })
                 });
             }
         }
-        return cardcontainer;
+        return cardContainer;
     }
-    function createCardItem(_data, _CardDefinition) {
-        var carditem = createHtmlElement('div'); addClassListToHtmlElement(carditem, ['card-item']); return carditem;
+    function createCardItem(_data, _CardDefinition, cardContainer) {
+        var cardItem = createHtmlElement('div'); addClassListToHtmlElement(cardItem, ['card-item']); appendElements(cardContainer, cardItem); return cardItem;
+
     }
-    function createCardValue(_data, _CardDefinition) {
-        let cardValueOptions = getValueFromObject(inputObject, "valueOption");
-        var span_value = createHtmlElement('span');
-        addClassListToHtmlElement(span_value, ['card-value']);
+    function createCardValue(_data, _CardDefinition, cardItem) {
+        var spanValue = createHtmlElement('span'); addClassListToHtmlElement(spanValue, ['card-value']); appendElements(cardItem, spanValue);
         if (cardValueOptions) {
             const classNames = cardValueOptions["className"] ? cardValueOptions["className"] : "";
             let classNamesList = classNames.split(" ");
-            if (classNamesList && classNamesList["length"] > 0) { addClassListToHtmlElement(span_value, classNamesList) }
-            if (cardValueOptions["id"]) { span_value.id = cardValueOptions["id"]; }
-            if (cardValueOptions["animate_keyframe"]) { span_value.animate(cardValueOptions["animate_keyframe"]); }
-            assingCardValueEvents(span_value)
-
-            function assingCardValueEvents(span_value_object) {
-                Object.keys(SIMPLE_CRADS_FUNCTIONS.cardValue[0]).filter(function (e) { return Object.keys(cardValueOptions).includes(e); }).forEach(function (e) {
-                    span_value_object.addEventListener(SIMPLE_CRADS_FUNCTIONS.cardValue[0][e], function (event) {
-                        cardValueOptions[e](_data, span_value, _data[_CardDefinition.value]);
-                        event.stopPropagation();
-                    })
-                });
-            }
+            if (classNamesList && classNamesList["length"] > 0) addClassListToHtmlElement(spanValue, classNamesList)
+            if (cardValueOptions["id"]) spanValue.id = cardValueOptions["id"];
+            assingCardValueEvents(spanValue)
         }
-        return span_value;
+        if (cardValueOptions && Object.keys(cardValueOptions).includes('applyTickerFormat') && cardValueOptions["applyTickerFormat"] == true) fn_tickerformat(spanValue, _data[_CardDefinition.value], cardValueOptions["valueType"] || (typeof _data[_CardDefinition.value]), cardValueOptions["countrySymbol"], cardValueOptions["currency"], cardValueOptions["useThousandSeperator"]);
+        else {
+            fnSetValue(spanValue, _data[_CardDefinition.value], cardValueOptions["valueType"] || (typeof _data[_CardDefinition.value]), cardValueOptions["countrySymbol"], cardValueOptions["currency"], cardValueOptions["useThousandSeperator"]);
+        }
+        function assingCardValueEvents(span_value_object) {
+            Object.keys(KPI_CRADS_FUNCTIONS.cardValue[0]).filter(function (e) { return Object.keys(cardValueOptions).includes(e); }).forEach(function (e) {
+                span_value_object.addEventListener(KPI_CRADS_FUNCTIONS.cardValue[0][e], function (event) {
+                    cardValueOptions[e](_data, spanValue, _data[_CardDefinition.value]);
+                    event.stopPropagation();
+                })
+            });
+        }
+        return spanValue;
     }
-    function createCardText(_data, _CardDefinition) {
-        let cardTextOptions = getValueFromObject(inputObject, "textOption");
-        var span_heading = createHtmlElement('span');
-        addClassListToHtmlElement(span_heading, ['card-text']);
-        span_heading.innerHTML = _data[_CardDefinition.title] || "";
+    function createCardText(_data, _CardDefinition, cardItem) {
+        var spanHeading = createHtmlElement('span'); addClassListToHtmlElement(spanHeading, ['card-text']); appendElements(cardItem, spanHeading)
+        spanHeading.innerHTML = _data[_CardDefinition.title] || "";
         if (cardTextOptions) {
             const classNames = cardTextOptions["className"] ? cardTextOptions["className"] : "";
             let classNamesList = classNames.split(" ");
-            if (classNamesList && classNamesList["length"] > 0) { addClassListToHtmlElement(span_heading, classNamesList) }
-            if (cardTextOptions["id"]) { span_heading.id = cardTextOptions["id"]; }
-            if (cardTextOptions["animate_keyframe"]) { span_heading.animate(cardTextOptions["animate_keyframe"]); }
-            assingCardTextEvents(span_heading)
+            if (classNamesList && classNamesList["length"] > 0) addClassListToHtmlElement(spanHeading, classNamesList)
+            assingCardTextEvents(spanHeading)
             function assingCardTextEvents(span_heading_object) {
-                Object.keys(SIMPLE_CRADS_FUNCTIONS.cardText[0]).filter(function (e) { return Object.keys(cardTextOptions).includes(e); }).forEach(function (e) {
-                    span_value_object.addEventListener(SIMPLE_CRADS_FUNCTIONS.cardText[0][e], function (event) {
-                        cardTextOptions[e](_data, span_heading, _data[_CardDefinition.title]);
+                Object.keys(KPI_CRADS_FUNCTIONS.cardText[0]).filter(function (e) { return Object.keys(cardTextOptions).includes(e); }).forEach(function (e) {
+                    span_value_object.addEventListener(KPI_CRADS_FUNCTIONS.cardText[0][e], function (event) {
+                        cardTextOptions[e](_data, spanHeading, _data[_CardDefinition.title]);
                         event.stopPropagation();
                     })
                 });
             }
         }
-        return span_heading;
+        return spanHeading;
     }
 
     this.$drawcards = function () {
@@ -556,37 +760,36 @@ function SimpleCard(inputObject) {
         var card = createHtmlElement('div')
         addClassListToHtmlElement(card, ["card"])
 
-        globalSimpleCardObject.$selectorElement.html(card)
-        let url = getValueFromObject(inputObject, "url");
+        globalKPIObject.$selectorElement.html(card)
         if (url) {
             let loader = addLoader();
             card.appendChild(loader);
             let p = new Promise(function (resolve) {
                 let success = function (response) {
                     if (response && response.data) {
-                        globalSimpleCardObject.$data = response.data;
+                        globalKPIObject.$data = response.data;
                     }
                     else {
-                        globalSimpleCardObject.$data = response;
+                        globalKPIObject.$data = response;
                     }
                 }
-                globalSimpleCardObject.$Ajax(
+                globalKPIObject.$Ajax(
                     {
                         url: url,
-                        method: getValueFromObject(inputObject, "method") || "GET",
-                        data: getValueFromObject(inputObject, "requestData") || {},
+                        method: method,
+                        data: requestData,
                         isAsync: true,
                         resolve: resolve,
                         success: success
                     })
             }).then(function () {
                 loader.remove();
-                drawCard(globalSimpleCardObject.$data, globalSimpleCardObject.$cardDefinition, card);
+                drawCard(globalKPIObject.$data, cardDefinition, card);
             })
         }
         else {
-            globalSimpleCardObject.$data = getValueFromObject(inputObject, "data");
-            drawCard(globalSimpleCardObject.$data, globalSimpleCardObject.$cardDefinition, card);
+            globalKPIObject.$data = getValueFromObject(inputObject, "data");
+            drawCard(globalKPIObject.$data, cardDefinition, card);
         }
     }
 }
