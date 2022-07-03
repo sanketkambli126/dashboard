@@ -816,7 +816,7 @@ let piFilterChangeEvent = new CustomEvent('Pi.Filter.Change');
 
 function Filter(inputObject) {
     this.$returnObj = {}
-    let preselectedData = getValueFromObject(inputObject, 'data');
+    let preSelectedData = getValueFromObject(inputObject, 'data');
     this.userData = getValueFromObject(inputObject, "userData");
     this.$selectorElement = getValueFromObject(inputObject, "selector")
     let globalFilter = this;
@@ -824,16 +824,7 @@ function Filter(inputObject) {
     let filterslist = [];
 
     this.$createFilter = function () {
-        let filterElement = createFilterElement();
-        globalFilter.$content.filter = filterElement;
-        globalFilter.$selectorElement.html(filterElement);
-        filterItems = createFilterItems();
-        globalFilter.$content.items = filterItems;
-        filterCannel = createFilterCannel();
-        globalFilter.$content.cannel = filterCannel;
-        appendElements(filterElement, filterItems);
-        appendElements(filterElement, filterCannel);
-        createFilterElements();
+        createFilterElements(preSelectedData);
     }
     this.val = function () {
         return Object.assign(globalFilter.$returnObj, globalFilter.userData);
@@ -884,16 +875,21 @@ function Filter(inputObject) {
         }
     }
 
-    function createFilterElements() {
-        if (preselectedData) {
-            for(let d of Object.keys(preselectedData)) {
-                let data = preselectedData[d];
-                if (typeof data === "object" && data["length"] && data["length"] > 0) { if (data.length) { for(x of data) { createFilterItem(d, x.value, x.displayText, true, true); } } }
+    function createFilterElements(preSelectedData) {
+        let filterElement = createFilterElement();
+        globalFilter.$content.filter = filterElement;
+        globalFilter.$selectorElement.html(filterElement);
+        filterItems = createFilterItems(); globalFilter.$content.items = filterItems; appendElements(filterElement, filterItems);
+        filterCannel = createFilterCannel(); globalFilter.$content.cannel = filterCannel; appendElements(filterElement, filterCannel);
+        if (preSelectedData) {
+            for(let d of Object.keys(preSelectedData)) {
+                let data = preSelectedData[d];
+                if (Array.isArray(data)) { if (data.length) { for(x of data) { createFilterItem(d, x.value, x.displayText, true, true); } } }
                 else { createFilterItem(d, data.value, data.displayText, false, false); }
             }
         }
     }
-    function removeFilterelements(key, data, thisElement) {
+    function removeFilterElements(key, data, thisElement) {
         thisElement.remove();
         filterslist = filterslist.filter(function (e) { return (e.key == key && e.data == data) == false });
         var value = globalFilter.$returnObj[key];
@@ -919,7 +915,7 @@ function Filter(inputObject) {
             let closeText = createHtmlElement('span'); closeText.innerHTML = "X";
             addClassListToHtmlElement(closeText, ['filter-item-close'])
             closeText.addEventListener('click', function () {
-                removeFilterelements(key, data, filterItem);
+                removeFilterElements(key, data, filterItem);
             });
             globalFilter.$content.items.appendChild(filterItem);
             appendElements(filterItem, spanText);
@@ -947,6 +943,20 @@ function Filter(inputObject) {
             throw Error("Only primitive types are allowed")
         }
         createFilterItem(key, data, displayText, isList, append);
+    }
+
+    this.resetFilter = function () {
+        globalFilter.$returnObj = {}
+        globalFilter.$content = {};
+        filterslist = [];
+        createFilterElements(preSelectedData);
+    }
+
+    this.clearAll = function () {
+        globalFilter.$returnObj = {}
+        globalFilter.$content = {};
+        filterslist = [];
+        createFilterElements({});
     }
 }
 
