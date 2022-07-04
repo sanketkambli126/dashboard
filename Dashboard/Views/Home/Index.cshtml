@@ -18,86 +18,26 @@
         console.log(event);
     });
 </script>
-<!--
-    Parent of Flexbox are flex container
-    Childs are called as flex-item
-
-    Left Start and Right End
-    Center is cross origin
-
-    Cross up Start and Cross Down End
--->
-<br />
-<div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-10" id="filter">
-    </div>
+<div style="margin-left: 100px">
+    <svg width="500" height="500">
+        <circle cx="250" cy="250" fill="transparent" r="200" stroke="gray" stroke-width="40px" stroke-dasharray="942 1256" transform="rotate(135,250,250)" />
+        <circle cx="250" cy="250" fill="transparent" r="200" stroke="orange" stroke-width="40px" stroke-dasharray="400 1256" transform="rotate(135,250,250)">
+            <animate attributeName="stroke-dasharray" dur="1s" repeatCount="forwand" from="0 1256" to="400 1256"></animate>
+        </circle>
+    </svg>
 </div>
-<div class="row">
-    <div class="card-group">
-        <div id="activity_card" style="height: 5em;">
-
-        </div>
-    </div>
-    <div class="col-md-12" style="padding: 15px;">
-        <ul>
-            <li><span id="val1" draggable="true" ondragstart="drag(event)">Tip Top Arts</span></li>
-            <li><span id="val2" draggable="true" ondragstart="drag(event)">A K Arts</span></li>
-            <li><span id="val3" draggable="true" ondragstart="drag(event)">R R Jariwala</span></li>
-            <li><span id="val4" draggable="true" ondragstart="drag(event)">A1 Arts</span></li>
-            <li><span id="val5" draggable="true" ondragstart="drag(event)">Trisha Fashion Arts</span></li>
-            <li><span id="val6" draggable="true" ondragstart="drag(event)">Suhana</span></li>
-            <li><span id="val7" draggable="true" ondragstart="drag(event)">Afridi</span></li>
-            <li><span id="val8" draggable="true" ondragstart="drag(event)">Acme Fabs</span></li>
-            <li><span id="val9" draggable="true" ondragstart="drag(event)">Embroart</span></li>
-            <li><span id="val10" draggable="true" ondragstart="drag(event)">Kamal Export</span></li>
-            <li><span id="val11" draggable="true" ondragstart="drag(event)">Amit Textiles</span></li>
-            <li><span id="val12" draggable="true" ondragstart="drag(event)">Nem Tex</span></li>
-            <li><span id="val13" draggable="true" ondragstart="drag(event)">APETCH</span></li>
-            <li><span id="val14" draggable="true" ondragstart="drag(event)">PRADHAN'S</span></li>
-            <li><span id="val15" draggable="true" ondragstart="drag(event)">Balaji Enterprises</span></li>
-            <li><span id="val16" draggable="true" ondragstart="drag(event)">Tulsi Art</span></li>
-        </ul>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12" id="divgraph" style="height: 200px;width:500px;">
+<div class="col-md-12">
+    <div id="gauge" style="height: 200px; width: 200px; border: 1px solid">
 
     </div>
 </div>
-@*<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
-            <rect x="0" y="0" width="300" height="300" fill="transparent" stroke="black" stroke-width=""></rect>
-        </svg>
-    <div class="col-md-12" style="width: 50vw; height: 50vh">
-        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-            <line x1="0" y1="0" x2="0" y2="100%" stroke="black" stroke-width="4px"></line>
-            <line x1="0%" y1="100%" x2="100%" y2="100%" stroke="black" stroke-width="4px"></line>
-            <rect x="10%" y="50%" fill="blue" width="30%" height="50%"></rect>
-            <text x="30%" y="80%" class="small">
-                <div id="abc" draggable="true" ondrag="drag(event)">
-                    You are
-                    <tspan draggable="true" ondragstart="drag(event)">not</tspan>
-                    a banana!
-                </div>
-            </text>
-        </svg>
 
-
-        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-            <!-- 0 0 1 whether to draw it in clock wise direction
-                path d="M [starting x] [starting y] A [radius x] [radius  y] 0 0 1 [ending x] [ending y]"
-            -->
-            <path d="M 100 300 A 200 200 0 0 1 500 300" stroke-width="10px" stroke="black" fill="none"></path>
-            <path d="M 100 300 A 200 200 0 0 1 158 158" stroke-width="10px" stroke="blue" fill="none"></path>
-        </svg>
+<div class="col-md-12">
+    <div id="piechart" style="height: 600px; width: 600px; border: 1px solid">
+        
     </div>
-*@
+</div>
 
-<script>
-    //window.onload = function () {
-    //    setInterval(function () {
-    //        window.location.reload();
-
-    //    }, 4000)
-    //};
-</script>
+<svg>
+    <path d="M [center Pt x],[center Pt y] l 200,0 a200,200 0 0 0 "
+</svg>

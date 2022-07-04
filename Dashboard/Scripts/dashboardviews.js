@@ -1,5 +1,4 @@
-﻿var STYLESHEET = document.styleSheets[0]; const THREEDOTS = '...'; // to make continuation of Word if it exceeds the value
-const valueType = { string: "string", number: "number", percentage: "percentage", currency: "currency" };
+﻿const valueType = { string: "string", number: "number", percentage: "percentage", currency: "currency" };
 const FORMAT = { number: { style: { numeric: 'number', currency: 'currency', percentage: 'percentage' } } }; Object.freeze(FORMAT);
 const CURRENCY = { rupees: "", euro: "", pounds: "", dollars: "USD" }; Object.freeze(CURRENCY);
 const COUNTRY_SYMBOL = { INDIA: "hi-IN", US: "en-US" }; Object.freeze(COUNTRY_SYMBOL);
@@ -1548,5 +1547,115 @@ jQuery.prototype.GroupBarGraph = function (inputObject) {
     inputObject["selector"] = this;
     let objBar = new GroupBarGraph(inputObject);
     objBar.$drawBar();
+    return objBar;
+}
+
+////////////////////////////////////////////// Gauge ////////////////////////////////////////////////////
+
+function Gauge(inputObject) {
+    dashboardItems.call(this);
+    globalObject = this;
+    this.$selectorElement = getValueFromObject(inputObject, "selector")
+    this.$data = getValueFromObject(inputObject, "data");
+    this.$drawGauge = function () {
+        drawGauge();
+    }
+
+    function drawGauge() {
+        // Created a Wrapper Div whise height will be 100% and Width will get Dynamically Calculated
+        let wrapperDiv = createHtmlElement('div'); wrapperDiv.style.height = "100%"
+        globalObject.$selectorElement.html(wrapperDiv);
+        let title = createHtmlElement('span'); title.style.padding = "10px"; appendElements(wrapperDiv, title); addClassListToHtmlElement(title, ["flex-container", "flex-center"]); title.innerHTML = getValueFromObject(inputObject, "title");
+        let svgDiv = createHtmlElement('div'); svgDiv.style.height = globalObject.$selectorElement.height() - $(title).height() + "px"; addClassListToHtmlElement(svgDiv, ["flex-container"]); appendElements(wrapperDiv, svgDiv);
+        let mainSVGDiv = createElementNS('svg'); appendElements(svgDiv, mainSVGDiv); mainSVGDiv.setAttribute("height", "100%"); mainSVGDiv.setAttribute("width", "100%");
+        let circle = createElementNS('circle'); appendElements(mainSVGDiv, circle); circle.setAttribute("cx", "50%"); circle.setAttribute("cy", "50%"); circle.setAttribute("r", "35%"); circle.setAttribute("fill", "transparent"); circle.setAttribute("stroke", "gray"); circle.setAttribute("stroke-width", "5%");
+        transformHeight = Math.ceil($(svgDiv).height() / 2);
+        transformWidth = Math.ceil($(svgDiv).width() / 2);
+        circumference = 35 * 2 * 3.14; arc = (circumference * (270 / 360)); circle.setAttribute("stroke-dasharray", `${arc}% ${circumference}%`); circle.setAttribute("transform", `rotate(135,${transformWidth},${transformHeight})`);
+        const rangeFrom = globalObject.$data.range.from;
+        const rangeTo = globalObject.$data.range.to;
+        total = rangeTo - rangeFrom
+        const valuePercent = ((globalObject.$data.value - rangeFrom) / total) * 100;
+        newArc = arc - (((100 - valuePercent) / 100) * arc);
+        let percentcircle = createElementNS('circle'); percentcircle.setAttribute("cx", "50%"); percentcircle.setAttribute("cy", "50%"); percentcircle.setAttribute("r", "35%"); percentcircle.setAttribute("fill", "transparent"); percentcircle.setAttribute("stroke", "green"); percentcircle.setAttribute("stroke-width", "5%");
+        percentcircle.setAttribute("stroke-dasharray", `${newArc}% ${circumference}%`); percentcircle.setAttribute("transform", `rotate(135,${transformWidth},${transformHeight})`);
+        let animate = createElementNS("animate"); animate.setAttribute("attributeName", "stroke-dasharray"); animate.setAttribute("dur", "1s"); animate.setAttribute("repeatCount", "forwand"); animate.setAttribute("from", `0% ${circumference}%`); animate.setAttribute("to", `${newArc}% ${circumference}%`);
+        appendElements(percentcircle, animate); appendElements(mainSVGDiv, percentcircle);
+    }
+}
+
+
+
+Gauge.prototype = Object.create(dashboardItems.prototype);
+// Prototyping cardview constructor to cardview only so that instance can be create by using new cardview
+Gauge.prototype.constructor = Gauge;
+
+//// ProtoTyping cardgroup on Jquery Element
+jQuery.prototype.Gauge = function (inputObject) {
+    inputObject = inputObject || {};
+    inputObject["selector"] = this;
+    let objBar = new Gauge(inputObject);
+    objBar.$drawGauge();
+    return objBar;
+}
+////////////////////////////////////////  Pie Chart //////////////////////////////////////////
+function PieChart(inputObject) {
+    globalObject = this;
+    this.$selectorElement = getValueFromObject(inputObject, "selector")
+    this.$data = getValueFromObject(inputObject, "data");
+    this.$drawPie = function () {
+        drawPie();
+    }
+
+    function drawPie() {
+        // Created a Wrapper Div whise height will be 100% and Width will get Dynamically Calculated
+        let wrapperDiv = createHtmlElement('div'); wrapperDiv.style.height = "100%"
+        globalObject.$selectorElement.html(wrapperDiv);
+        let title = createHtmlElement('span'); title.style.padding = "10px"; appendElements(wrapperDiv, title); addClassListToHtmlElement(title, ["flex-container", "flex-center"]); title.innerHTML = getValueFromObject(inputObject, "title");
+        let svgDiv = createHtmlElement('div'); svgDiv.style.height = globalObject.$selectorElement.height() - $(title).height() + "px"; addClassListToHtmlElement(svgDiv, ["flex-container"]); appendElements(wrapperDiv, svgDiv);
+        let mainSVGDiv = createElementNS('svg'); appendElements(svgDiv, mainSVGDiv); mainSVGDiv.setAttribute("height", "100%"); mainSVGDiv.setAttribute("width", "100%");
+        radius = $(svgDiv).width() * 35 / 100;
+        values = globalObject.$data.slices.map(function (x) { return x.value; });
+        let total = values.reduce(function (val1, val2) { return val1 + val2 });
+
+        let angles = values.map(function (x) { return x * 360 / total });
+        console.log(angles);
+        let angle = 0;
+        x1 = radius;
+        y1 = 0;
+        angles.forEach(function (x, idx) {
+            angle += x;
+            radian = angleToRadian(angle);
+            x2 = (Math.cos(radian) * radius);
+            y2 = (Math.sin(radian) * radius);
+
+            let path = createElementNS('path'); path.setAttribute("stroke", "black"); path.setAttribute("fill", "green"); path.setAttribute("stroke-width", "1px"); path.setAttribute("d", `M ${$(svgDiv).width() / 2},${$(svgDiv).width() / 2} l ${x1},${y1 * -1} a${radius},${radius} 0 0 0 ${x2},${y2 * -1}`);
+            appendElements(mainSVGDiv, path);
+
+            x1 = x2;
+            y1 = y2;
+        })
+
+
+    }
+
+    function angleToRadian(angle) {
+
+        var radianValue = angle * (Math.PI / 180);
+        return radianValue;
+    }
+}
+
+
+PieChart.prototype = Object.create(dashboardItems.prototype);
+// Prototyping cardview constructor to cardview only so that instance can be create by using new cardview
+PieChart.prototype.constructor = PieChart;
+
+//// ProtoTyping cardgroup on Jquery Element
+jQuery.prototype.PieChart = function (inputObject) {
+    inputObject = inputObject || {};
+    inputObject["selector"] = this;
+    let objBar = new PieChart(inputObject);
+    objBar.$drawPie();
     return objBar;
 }
