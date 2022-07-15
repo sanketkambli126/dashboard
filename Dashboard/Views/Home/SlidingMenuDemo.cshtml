@@ -1,0 +1,166 @@
+﻿<script src="~/Scripts/jquery-1.10.2.js"></script>
+<link href="~/assets/lib/dashboard/css/dashboard.css" rel="stylesheet" />
+<style>
+    .disabled-events {
+        pointer-events: none;
+    }
+
+    .dashboard-sl-menu-a {
+        color: #40798C;
+        background-color: transparent;
+        padding: 0.3em;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .dashboard-sl-menu-checkbox-container {
+        display: flex;
+        float: right;
+        position: relative;
+        background: transparent;
+        flex-direction: row-reverse;
+        height: 100%;
+    }
+
+    .dashboard-sl-menu-checkbox-trigger {
+        opacity: 0;
+        position: absolute;
+        width: 20px;
+        height: 100%;
+        right: 0px;
+        cursor: pointer;
+        z-index: 5;
+    }
+
+    .hamburger-menu, .hamburger-menu::before, .hamburger-menu::after {
+        display: block;
+        position: absolute;
+        background: black;
+        width: 30px;
+        height: 4px;
+        margin: 1.3em 3em;
+        transition: background 0.3s;
+    }
+
+        .hamburger-menu::before, .hamburger-menu::after {
+            content: '';
+            position: absolute;
+            margin: -0.7em 0 0;
+            transition: width 0.7s ease 0.3s, transform 0.7s ease 0.3s;
+        }
+
+        .hamburger-menu::after {
+            margin-top: 0.7em;
+        }
+
+    .hamburger-menu {
+        position: relative;
+        display: block;
+        margin: 0;
+        margin-top: 1.45em;
+        margin-right: 0.35em;
+        margin-left: 0.35em;
+        margin-bottom: 1.45em;
+        transition: width 0.3s ease;
+    }
+
+    .dashboard-sl-menu-checkbox-trigger:checked {
+        right: 0px;
+    }
+
+        .dashboard-sl-menu-checkbox-trigger:checked + .menu-content .hamburger-menu {
+            width: 2em;
+            transition: width 0.7s ease 0.7s;
+        }
+
+            .dashboard-sl-menu-checkbox-trigger:checked + .menu-content .hamburger-menu::before {
+                width: 1.2em;
+                transform: rotate(-35deg);
+                margin-top: -0.4em;
+            }
+
+            .dashboard-sl-menu-checkbox-trigger:checked + .menu-content .hamburger-menu::after {
+                width: 1.2em;
+                transform: rotate(35deg);
+                margin-top: 0.4em;
+            }
+
+        .dashboard-sl-menu-checkbox-trigger:checked + .menu-content ul {
+            width: 200px;
+            height: 200px;
+            transition: width 0.7s ease 0.3s, height 0.3s ease;
+        }
+
+    .menu-content {
+        display: flex;
+        background: transparent;
+        color: black;
+        float: left;
+    }
+
+        .menu-content ul {
+            display: block;
+            padding-left: 0;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            margin: 0;
+            width: 0px;
+            height: 0px;
+            overflow: hidden;
+            transition: height 0.3s ease 0.7s, width 0.7s ease;
+        }
+
+            .menu-content ul li {
+                list-style: none;
+                padding-top: 1em;
+                padding-bottom: 1em;
+                cursor: pointer;
+                transition: color 0.5s, background 0.5s;
+            }
+
+                .menu-content ul li:hover {
+                    color: #0CD6AD;
+                    background: transparent;
+                }
+
+    .dashboard-sl-menu-center {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+    }
+
+    .dashboard-heading {
+        font-size: 20px;
+        font-family: serif;
+        font-weight: bold;
+    }
+</style>
+
+<div id="Donut" style="width: 700px; height: 700px;border: 1px solid;">
+    <div style="height: 100%;">
+        <span class="dashboard-heading inline-flex-container flex-center" style="padding: 10px;">Minor</span>
+        <span class="dashboard-sl-menu-checkbox-container">
+            <input class="dashboard-sl-menu-checkbox-trigger" type="checkbox" />
+            <span class="menu-content disabled-events">
+                <ul>
+                    <li class="dashboard-sl-menu-center"></li>
+                    <li class="dashboard-sl-menu-center">Home</li>
+                    <li class="dashboard-sl-menu-center">About</li>
+                    <li class="dashboard-sl-menu-center">Contact</li>
+                </ul>
+                <span class="hamburger-menu"></span>
+            </span>
+        </span>
+        <div class="flex-container" style="height: 678.021px;">
+            <svg height="100%" width="100%">
+                <path fill="rgb(223, 177, 215)" d="M 349,339 l 244.3,0 a244.3,244.3 0 0 0 -203.12710774901714,-240.8054877773531"></path>
+                <path fill="rgb(149, 129, 222)" d="M 349,339 l 41.17289225098287,-240.8054877773531 a244.3,244.3 0 0 0 -164.96642676309818,30.192926867521038"></path>
+                <path fill="rgb(164, 177, 170)" d="M 349,339 l -123.79353451211531,-210.61256090983207 a244.3,244.3 0 0 0 5.684341886080802e-14,421.2251218196642"></path>
+                <path fill="rgb(182, 222, 134)" d="M 349,339 l -123.79353451211526,210.6125609098321 a244.3,244.3 0 0 0 164.96642676309807,30.192926867521038"></path>
+                <path fill="rgb(152, 202, 183)" d="M 349,339 l 41.172892250982805,240.80548777735314 a244.3,244.3 0 0 0 145.5635899597987,-83.28731037695758"></path>
+                <path fill="rgb(234, 136, 246)" d="M 349,339 l 186.7364822107815,157.51817740039556 a244.3,244.3 0 0 0 57.56351778921851,-157.51817740039527"></path>
+                <circle cx="349" cy="339" r="195.44" fill="white"></circle>
+            </svg>
+        </div>
+    </div>
+</div>

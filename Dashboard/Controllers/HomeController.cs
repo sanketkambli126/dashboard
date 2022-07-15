@@ -25,13 +25,18 @@ namespace Dashboard.Controllers
                 Data = new
                 {
                     key = "On Time Supplies",
-                    value = "800",
+                    value = "1000000000",
                     EfficiencyPercentage = Enumerable.Range(1, 2).Select(x => new { value = x == 1 ? 800 : 200 }).ToList()
                 }
             };
         }
 
         public ActionResult DragDrop()
+        {
+            return View();
+        }
+
+        public ActionResult SlidingMenuDemo()
         {
             return View();
         }

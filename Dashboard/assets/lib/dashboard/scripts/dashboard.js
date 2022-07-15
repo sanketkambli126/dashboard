@@ -1,4 +1,5 @@
-﻿const valueType = { string: "string", number: "number", percentage: "percentage", currency: "currency" };
+﻿const THREEDOTS = '...'; // to make continuation of Word if it exceeds the value
+const valueType = { string: "string", number: "number", percentage: "percentage", currency: "currency" };
 const FORMAT = { number: { style: { numeric: 'number', currency: 'currency', percentage: 'percentage' } } }; Object.freeze(FORMAT);
 const CURRENCY = { rupees: "", euro: "", pounds: "", dollars: "USD" }; Object.freeze(CURRENCY);
 const COUNTRY_SYMBOL = { INDIA: "hi-IN", US: "en-US" }; Object.freeze(COUNTRY_SYMBOL);
@@ -150,6 +151,7 @@ Intl.NumberFormat.prototype.getCurrencyValue = function (val, isExcludeSymbol) {
 }
 
 function fn_tickerformat(obj, val, style, locale, currency, useThousandSeperator) {
+    val = Number.isNaN(val) ? val : Number.parseFloat(val);
     switch (style) {
         case valueType.string:
             setInnerHTMLValue(obj, val);
@@ -213,6 +215,7 @@ function fn_tickerformat(obj, val, style, locale, currency, useThousandSeperator
 }
 
 function fnSetValue(obj, val, style, locale, currency, useThousandSeperator) {
+    val = Number.isNaN(val) ? val : Number.parseFloat(val);
     switch (style) {
         case valueType.string:
             setInnerHTMLValue(obj, val);
@@ -853,7 +856,7 @@ function Filter(inputObject) {
         addClassListToHtmlElement(filterCannel, ['filter-cannel']);
         let filterCannelOptions = getValueFromObject(inputObject, "filterOption");
         let spanText = createHtmlElement('span'); addClassListToHtmlElement(spanText, ['filter-text']); spanText.innerHTML = "Filtes";
-        let img = createHtmlElement('img'); addClassListToHtmlElement(img, ['filter-icon']); img.src = "/assets/image/Filter_Icon.png";
+        let img = createHtmlElement('img'); addClassListToHtmlElement(img, ['filter-icon']); img.src =  "/assets/lib/dashboard/images/Filter_Icon.png";
         appendElements(filterCannel, spanText); appendElements(filterCannel, img);
         if (filterCannelOptions) {
             const classNames = filterCannelOptions["className"] ? filterCannelOptions["className"] : "";
@@ -1629,7 +1632,7 @@ function PieChart(inputObject) {
             x2 = (Math.cos(radian) * radius);
             y2 = (Math.sin(radian) * radius);
 
-            let path = createElementNS('path'); path.setAttribute("stroke", "black"); path.setAttribute("fill", "green"); path.setAttribute("stroke-width", "1px"); path.setAttribute("d", `M ${$(svgDiv).width() / 2},${$(svgDiv).width() / 2} l ${x1},${y1 * -1} a${radius},${radius} 0 0 0 ${x2},${y2 * -1}`);
+            let path = createElementNS('path'); path.setAttribute("fill", generateLightColorRgb()); path.setAttribute("d", `M ${$(svgDiv).width() / 2},${$(svgDiv).height() / 2} l ${x1},${y1 * -1} a${radius},${radius} 0 0 0 ${x2 - x1},${(y2 - y1) * -1}`);
             appendElements(mainSVGDiv, path);
 
             x1 = x2;
@@ -1657,5 +1660,68 @@ jQuery.prototype.PieChart = function (inputObject) {
     inputObject["selector"] = this;
     let objBar = new PieChart(inputObject);
     objBar.$drawPie();
+    return objBar;
+}
+
+////////////////////////////////////////  Donut Chart //////////////////////////////////////////
+function DonutChart(inputObject) {
+    globalObject = this;
+    this.$selectorElement = getValueFromObject(inputObject, "selector")
+    this.$data = getValueFromObject(inputObject, "data");
+    this.$drawDonut = function () {
+        drawDonut();
+    }
+
+    function drawDonut() {
+        // Created a Wrapper Div whise height will be 100% and Width will get Dynamically Calculated
+        let wrapperDiv = createHtmlElement('div'); wrapperDiv.style.height = "100%"
+        globalObject.$selectorElement.html(wrapperDiv);
+        let title = createHtmlElement('span'); title.style.padding = "10px"; appendElements(wrapperDiv, title); addClassListToHtmlElement(title, ["flex-container", "flex-center"]); title.innerHTML = getValueFromObject(inputObject, "title");
+        let svgDiv = createHtmlElement('div'); svgDiv.style.height = globalObject.$selectorElement.height() - $(title).height() + "px"; addClassListToHtmlElement(svgDiv, ["flex-container"]); appendElements(wrapperDiv, svgDiv);
+        let mainSVGDiv = createElementNS('svg'); appendElements(svgDiv, mainSVGDiv); mainSVGDiv.setAttribute("height", "100%"); mainSVGDiv.setAttribute("width", "100%");
+        radius = $(svgDiv).width() * 35 / 100;
+        values = globalObject.$data.slices.map(function (x) { return x.value; });
+        let total = values.reduce(function (val1, val2) { return val1 + val2 });
+
+        let angles = values.map(function (x) { return x * 360 / total });
+        console.log(angles);
+        let angle = 0;
+        x1 = radius;
+        y1 = 0;
+        angles.forEach(function (x, idx) {
+            angle += x;
+            radian = angleToRadian(angle);
+            x2 = (Math.cos(radian) * radius);
+            y2 = (Math.sin(radian) * radius);
+
+            let path = createElementNS('path'); path.setAttribute("fill", generateLightColorRgb()); path.setAttribute("d", `M ${$(svgDiv).width() / 2},${$(svgDiv).height() / 2} l ${x1},${y1 * -1} a${radius},${radius} 0 0 0 ${x2 - x1},${(y2 - y1) * -1}`);
+            appendElements(mainSVGDiv, path);
+
+            x1 = x2;
+            y1 = y2;
+        })
+        offsetRadius = radius - (radius * 20 / 100);
+        circle = createElementNS('circle'); appendElements(mainSVGDiv, circle); circle.setAttribute("cx", $(svgDiv).width() / 2); circle.setAttribute("cy", $(svgDiv).height() / 2); circle.setAttribute("r", offsetRadius); circle.setAttribute("fill", "white");
+
+    }
+
+    function angleToRadian(angle) {
+
+        var radianValue = angle * (Math.PI / 180);
+        return radianValue;
+    }
+}
+
+
+DonutChart.prototype = Object.create(dashboardItems.prototype);
+// Prototyping cardview constructor to cardview only so that instance can be create by using new cardview
+DonutChart.prototype.constructor = DonutChart;
+
+//// ProtoTyping cardgroup on Jquery Element
+jQuery.prototype.DonutChart = function (inputObject) {
+    inputObject = inputObject || {};
+    inputObject["selector"] = this;
+    let objBar = new DonutChart(inputObject);
+    objBar.$drawDonut();
     return objBar;
 }
